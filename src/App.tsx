@@ -1,5 +1,12 @@
+import HomePage from './pages/HomePage';
+import { MuiWrapper } from './theme';
+
 function App() {
-  return <div>Hello World</div>;
+  return (
+    <MuiWrapper>
+      <HomePage />
+    </MuiWrapper>
+  );
 }
 
 export default App;
