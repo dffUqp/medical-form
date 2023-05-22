@@ -29,6 +29,7 @@ module.exports = {
     'react/require-default-props': 0,
     'react/function-component-definition': 0,
     '@typescript-eslint/no-empty-interface': 'warn',
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'prettier/prettier': [
       'warn',
       {
