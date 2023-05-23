@@ -1,5 +1,9 @@
 import { IAppointmentFormData, TSelectOptions } from '../interfaces';
 
+// Temporary decision
+const onlyFemaleSpecialtyIds = ['9', '2'];
+const onlyMaleSpecialtyIds = ['3'];
+
 const filterDoctor = (
   formattedOption: TSelectOptions,
   values: IAppointmentFormData,
@@ -22,6 +26,16 @@ const filterDoctor = (
   if (patientAge) {
     filteredOptions = filteredOptions.filter((option) => {
       return option.isPediatrician === patientAge < 16;
+    });
+  }
+
+  if (values.sex) {
+    filteredOptions = filteredOptions.filter((option) => {
+      if (values.sex === 'Male') {
+        return !onlyFemaleSpecialtyIds.includes(option?.specialityId ?? '');
+      }
+
+      return !onlyMaleSpecialtyIds.includes(option?.specialityId ?? '');
     });
   }
 
