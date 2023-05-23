@@ -1,5 +1,5 @@
 import { Formik, Form } from 'formik';
-import { Button, Paper, CircularProgress } from '@mui/material';
+import { Button, Paper, CircularProgress, LinearProgress } from '@mui/material';
 import useFetch from 'src/hooks/useFetch';
 import { urls } from 'src/lib';
 
@@ -28,10 +28,10 @@ const MedicalForm = () => {
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting, resetForm }) => {
         setTimeout(() => {
+          resetForm();
           setSubmitting(false);
         }, 400);
         console.log(values);
-        resetForm();
       }}
     >
       {({ isSubmitting }) => (
@@ -78,8 +78,9 @@ const MedicalForm = () => {
 
             <FormikInput name="email" label="Email" />
 
-            <FormikNumberInput name="phoneNumber" label="Phone Number" />
+            <FormikNumberInput name="phoneNumber" />
 
+            {isSubmitting && <LinearProgress />}
             <Button disabled={isSubmitting} type="submit">
               Submit
             </Button>
