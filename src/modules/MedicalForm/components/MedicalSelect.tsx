@@ -48,11 +48,11 @@ const MedicalSelect = ({
     if (name === 'doctor') {
       const doctor = options?.find((value) => value.id === e.target.value);
       if (!values.city) {
-        setFieldValue('city', doctor?.cityId, false);
+        setFieldValue('city', doctor?.cityId);
       }
 
       if (!values.doctorSpecialty) {
-        setFieldValue('doctorSpecialty', doctor?.specialityId, false);
+        setFieldValue('doctorSpecialty', doctor?.specialityId);
       }
     }
 

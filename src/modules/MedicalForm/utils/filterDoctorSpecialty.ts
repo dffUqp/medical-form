@@ -7,14 +7,6 @@ const filterDoctorSpecialty = (
   doctors?: IDoctor[]
 ) => {
   let filteredOptions = formattedOption;
-  const doctorsInCurrentCity = doctors?.filter((value) => {
-    if (!patientAge) {
-      return value.cityId === values.city;
-    }
-    return (
-      value.cityId === values.city && value.isPediatrician === patientAge < 16
-    );
-  });
 
   if (values.sex) {
     filteredOptions = filteredOptions.filter((option) => {
@@ -42,6 +34,15 @@ const filterDoctorSpecialty = (
   }
 
   if (values.city) {
+    const doctorsInCurrentCity = doctors?.filter((value) => {
+      if (!patientAge) {
+        return value.cityId === values.city;
+      }
+      return (
+        value.cityId === values.city && value.isPediatrician === patientAge < 16
+      );
+    });
+
     filteredOptions = filteredOptions.filter((option) => {
       return doctorsInCurrentCity?.some(
         (value) => value.specialityId === option.id
