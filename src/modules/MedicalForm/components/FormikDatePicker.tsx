@@ -8,8 +8,8 @@ type TFormikDatePickerProps = {
 
 const FormikDatePicker = ({ name, label }: TFormikDatePickerProps) => {
   const [field, meta] = useField(name);
-  const isError = meta.error;
-  const { setFieldValue } = useFormikContext();
+  const isError = meta.touched && meta.error;
+  const { setFieldValue, setFieldTouched } = useFormikContext();
 
   return (
     <MuiDatePicker
@@ -21,6 +21,7 @@ const FormikDatePicker = ({ name, label }: TFormikDatePickerProps) => {
         textField: {
           helperText: isError || '',
           error: !!isError,
+          onBlur: () => setFieldTouched(name),
           id: 'outlined-size-small',
           size: 'small',
           InputLabelProps: { shrink: true },
