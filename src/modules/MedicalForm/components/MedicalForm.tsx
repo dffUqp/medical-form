@@ -56,16 +56,10 @@ const MedicalForm = () => {
                 { name: 'Male', id: 'Male' },
                 { name: 'Female', id: 'Female' },
               ]}
-              doctors={doctors}
               label="Sex"
             />
 
-            <MedicalSelect
-              name="city"
-              options={cities}
-              doctors={doctors}
-              label="City"
-            />
+            <MedicalSelect name="city" options={cities} label="City" />
 
             <MedicalSelect
               name="doctorSpecialty"
@@ -74,7 +68,12 @@ const MedicalForm = () => {
               label="Doctor Specialty"
             />
 
-            <MedicalSelect name="doctor" options={doctors} label="Doctor" />
+            <MedicalSelect
+              name="doctor"
+              specialties={doctorSpecialty}
+              label="Doctors"
+              options={doctors}
+            />
 
             <FormikInput name="email" label="Email" />
 

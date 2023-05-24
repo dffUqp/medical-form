@@ -9,25 +9,54 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 import { useField, useFormikContext } from 'formik';
-import { IAppointmentFormData, IDoctor, TSelectOptions } from '../interfaces';
+import {
+  IAppointmentFormData,
+  IDoctor,
+  ISpecialty,
+  TSelectOptions,
+} from '../interfaces';
 import useFilteredData from '../hooks/useFilteredData';
 
-type TMedicalSelectProps = {
+type TMedicalSelectStaticProps = {
   options: TSelectOptions;
-  name: string;
-  doctors?: IDoctor[];
   label: string;
 };
+
+type TMedicalSelectProps = (
+  | {
+      name: 'doctor';
+      specialties: ISpecialty[];
+      doctors?: never;
+    }
+  | {
+      name: 'doctorSpecialty';
+      doctors: IDoctor[];
+      specialties?: never;
+    }
+  | {
+      name: keyof IAppointmentFormData;
+      doctors?: never;
+      specialties?: never;
+    }
+) &
+  TMedicalSelectStaticProps;
 
 const MedicalSelect = ({
   options,
   name,
   doctors,
+  specialties,
   label,
 }: TMedicalSelectProps) => {
   const [field, meta] = useField(name);
   const { values, setFieldValue } = useFormikContext<IAppointmentFormData>();
-  const filteredOptions = useFilteredData({ name, values, options, doctors });
+  const filteredOptions = useFilteredData({
+    name,
+    values,
+    options,
+    doctors,
+    specialties,
+  });
 
   useEffect(() => {
     if (!filteredOptions.find((option) => option.id === field.value)) {
