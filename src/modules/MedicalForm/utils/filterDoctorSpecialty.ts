@@ -1,10 +1,10 @@
-import { IAppointmentFormData, IDoctor, TSelectOptions } from '../interfaces';
+import { IAppointmentFormData, IDoctor, ISpecialty } from '../interfaces';
 
 const filterDoctorSpecialty = (
-  formattedOption: TSelectOptions,
+  formattedOption: ISpecialty[],
   values: IAppointmentFormData,
   patientAge: number | null,
-  doctors?: IDoctor[]
+  doctors: IDoctor[]
 ) => {
   let filteredOptions = formattedOption;
 
@@ -21,6 +21,7 @@ const filterDoctorSpecialty = (
       return false;
     });
   }
+
   if (patientAge) {
     filteredOptions = filteredOptions.filter((option) => {
       if (option.params?.maxAge) {
@@ -34,7 +35,7 @@ const filterDoctorSpecialty = (
   }
 
   if (values.city) {
-    const doctorsInCurrentCity = doctors?.filter((value) => {
+    const doctorsInCurrentCity = doctors.filter((value) => {
       if (!patientAge) {
         return value.cityId === values.city;
       }

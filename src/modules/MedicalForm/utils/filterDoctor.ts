@@ -1,13 +1,10 @@
-import { IAppointmentFormData, TSelectOptions } from '../interfaces';
-
-// Temporary decision
-const onlyFemaleSpecialtyIds = ['9', '2'];
-const onlyMaleSpecialtyIds = ['3'];
+import { IAppointmentFormData, IDoctor, ISpecialty } from '../interfaces';
 
 const filterDoctor = (
-  formattedOption: TSelectOptions,
+  formattedOption: IDoctor[],
   values: IAppointmentFormData,
-  patientAge: number | null
+  patientAge: number | null,
+  specialties: ISpecialty[]
 ) => {
   let filteredOptions = formattedOption;
 
@@ -25,17 +22,36 @@ const filterDoctor = (
 
   if (patientAge) {
     filteredOptions = filteredOptions.filter((option) => {
+      const doctorSpecialty = specialties.find(
+        (spec) => spec.id === option.specialityId
+      );
+
+      if (doctorSpecialty?.params?.maxAge) {
+        return patientAge < doctorSpecialty.params?.maxAge;
+      }
+      if (doctorSpecialty?.params?.minAge) {
+        return patientAge > doctorSpecialty.params?.minAge;
+      }
+
       return option.isPediatrician === patientAge < 16;
     });
   }
 
   if (values.sex) {
     filteredOptions = filteredOptions.filter((option) => {
-      if (values.sex === 'Male') {
-        return !onlyFemaleSpecialtyIds.includes(option?.specialityId ?? '');
+      const doctorSpecialty = specialties.find(
+        (spec) => spec.id === option.specialityId
+      );
+
+      if (doctorSpecialty?.params?.gender === values.sex) {
+        return true;
       }
 
-      return !onlyMaleSpecialtyIds.includes(option?.specialityId ?? '');
+      if (!doctorSpecialty?.params?.gender) {
+        return true;
+      }
+
+      return false;
     });
   }
 

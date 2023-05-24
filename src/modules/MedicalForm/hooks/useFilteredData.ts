@@ -2,12 +2,18 @@ import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import filterDoctorSpecialty from '../utils/filterDoctorSpecialty';
 import filterDoctor from '../utils/filterDoctor';
-import { IAppointmentFormData, IDoctor, TSelectOptions } from '../interfaces';
+import {
+  IAppointmentFormData,
+  IDoctor,
+  ISpecialty,
+  TSelectOptions,
+} from '../interfaces';
 
 type IFilteredDataProps = {
   options: TSelectOptions;
   name: string;
   doctors?: IDoctor[];
+  specialties?: ISpecialty[];
   values: IAppointmentFormData;
 };
 
@@ -16,6 +22,7 @@ const useFilteredData = ({
   values,
   options,
   doctors,
+  specialties,
 }: IFilteredDataProps): TSelectOptions => {
   const formattedOption = useMemo(
     () =>
@@ -34,12 +41,22 @@ const useFilteredData = ({
     [values.birthdayDate]
   );
 
-  if (name === 'doctorSpecialty') {
-    return filterDoctorSpecialty(formattedOption, values, patientAge, doctors);
+  if (doctors) {
+    return filterDoctorSpecialty(
+      formattedOption as ISpecialty[],
+      values,
+      patientAge,
+      doctors
+    );
   }
 
-  if (name === 'doctor') {
-    return filterDoctor(formattedOption, values, patientAge);
+  if (specialties) {
+    return filterDoctor(
+      formattedOption as IDoctor[],
+      values,
+      patientAge,
+      specialties as ISpecialty[]
+    );
   }
 
   return formattedOption;
