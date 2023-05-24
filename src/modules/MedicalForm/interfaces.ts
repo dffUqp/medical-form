@@ -1,6 +1,6 @@
 import { Dayjs } from 'dayjs';
 
-export type TGender = 'male' | 'female';
+export type TGender = 'Male' | 'Female';
 
 export interface IGenderOptions {
   id: string;
