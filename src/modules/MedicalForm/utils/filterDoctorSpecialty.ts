@@ -22,7 +22,7 @@ const filterDoctorSpecialty = (
     });
   }
 
-  if (patientAge) {
+  if (patientAge != null) {
     filteredOptions = filteredOptions.filter((option) => {
       if (option.params?.maxAge) {
         return patientAge < option.params?.maxAge;
