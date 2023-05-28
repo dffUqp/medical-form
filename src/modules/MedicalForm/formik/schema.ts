@@ -1,11 +1,14 @@
 import dayjs from 'dayjs';
+import { regExp } from 'src/lib';
 import { object, string } from 'yup';
 
 const contactsSchema = string().test(
   'Email or phone',
   'At least one of the email or phone is required',
   (_, testContext) => {
-    return testContext.parent.email || testContext.parent.phoneNumber;
+    const { phoneNumber, email } = testContext.parent;
+
+    return !!(email || phoneNumber);
   }
 );
 
@@ -21,19 +24,18 @@ const dateSchema = string().test(
 );
 
 const validationSchema = object().shape({
-  name: string()
-    .matches(/^[aA-zZ\s]+$/, 'Only English letters are allowed')
-    .min(2, 'Name must be at least 2 characters')
-    .required('Required'),
+  name: string().matches(regExp.name, 'Invalid name').required('Required'),
   birthdayDate: dateSchema.nullable().required('Required'),
   sex: string().required('Required'),
   city: string().required('Required'),
   doctorSpecialty: string(),
   doctor: string().required('Required'),
-  email: contactsSchema.email('Invalid email'),
+  email: contactsSchema.matches(regExp.mail, 'Invalid email'),
   phoneNumber: contactsSchema
-    .min(8, 'Phone number must be at least 8 digits')
-    .max(18, 'Phone number must be at most 18 digits'),
+    .transform((value) =>
+      value.replace(value?.split(' ')[0], '').replace(/ /g, '')
+    )
+    .matches(regExp.atLestEightChar, 'Phone number must be at least 8 digits'),
 });
 
 export default validationSchema;
