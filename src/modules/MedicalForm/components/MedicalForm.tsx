@@ -1,5 +1,6 @@
 import { Formik, Form } from 'formik';
-import { Button, Paper, CircularProgress, LinearProgress } from '@mui/material';
+import { Button, Paper, CircularProgress } from '@mui/material';
+import CustomScrollContainer from 'src/components/CustomScrollContainer';
 import useFetch from 'src/hooks/useFetch';
 import { urls } from 'src/lib';
 
@@ -26,65 +27,63 @@ const MedicalForm = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values, { setSubmitting, resetForm }) => {
-        setTimeout(() => {
-          resetForm();
-          setSubmitting(false);
-        }, 400);
+      onSubmit={(values, { resetForm }) => {
+        resetForm();
         console.log(values);
       }}
     >
-      {({ isSubmitting }) => (
-        <Form>
-          <Paper
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '20px',
-              width: '550px',
-              padding: '20px',
-              borderRadius: '5px',
-            }}
-          >
-            <FormikInput name="name" label="Name" type="text" />
+      {({ isValid }) => (
+        <CustomScrollContainer>
+          <Form>
+            <Paper
+              sx={{
+                display: 'flex',
+                width: '100%',
+                flexDirection: 'column',
+                padding: '20px',
+                borderRadius: '5px',
+                gap: '20px',
+              }}
+            >
+              <FormikInput name="name" label="Name" type="text" />
 
-            <FormikDatePicker name="birthdayDate" label="Birthday Date" />
+              <FormikDatePicker name="birthdayDate" label="Birthday Date" />
 
-            <MedicalSelect
-              name="sex"
-              options={[
-                { name: 'Male', id: 'Male' },
-                { name: 'Female', id: 'Female' },
-              ]}
-              label="Sex"
-            />
+              <MedicalSelect
+                name="sex"
+                options={[
+                  { name: 'Male', id: 'Male' },
+                  { name: 'Female', id: 'Female' },
+                ]}
+                label="Sex"
+              />
 
-            <MedicalSelect name="city" options={cities} label="City" />
+              <MedicalSelect name="city" options={cities} label="City" />
 
-            <MedicalSelect
-              name="doctorSpecialty"
-              options={doctorSpecialty}
-              doctors={doctors}
-              label="Doctor Specialty"
-            />
+              <MedicalSelect
+                name="doctorSpecialty"
+                options={doctorSpecialty}
+                doctors={doctors}
+                label="Doctor Specialty"
+              />
 
-            <MedicalSelect
-              name="doctor"
-              specialties={doctorSpecialty}
-              label="Doctors"
-              options={doctors}
-            />
+              <MedicalSelect
+                name="doctor"
+                specialties={doctorSpecialty}
+                label="Doctors"
+                options={doctors}
+              />
 
-            <FormikInput name="email" label="Email" />
+              <FormikInput name="email" label="Email" />
 
-            <FormikNumberInput name="phoneNumber" />
+              <FormikNumberInput name="phoneNumber" />
 
-            {isSubmitting && <LinearProgress />}
-            <Button disabled={isSubmitting} type="submit">
-              Submit
-            </Button>
-          </Paper>
-        </Form>
+              <Button type="submit" disabled={!isValid}>
+                Submit
+              </Button>
+            </Paper>
+          </Form>
+        </CustomScrollContainer>
       )}
     </Formik>
   );

@@ -19,7 +19,7 @@ const FormikDatePicker = ({ name, label }: TFormikDatePickerProps) => {
       disableFuture
       slotProps={{
         textField: {
-          helperText: isError || '',
+          helperText: isError || ' ',
           error: !!isError,
           onBlur: () => setFieldTouched(name),
           id: 'outlined-size-small',

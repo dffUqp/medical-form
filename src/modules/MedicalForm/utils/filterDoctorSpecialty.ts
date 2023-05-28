@@ -36,7 +36,7 @@ const filterDoctorSpecialty = (
 
   if (values.city) {
     const doctorsInCurrentCity = doctors.filter((value) => {
-      if (!patientAge) {
+      if (patientAge == null) {
         return value.cityId === values.city;
       }
       return (

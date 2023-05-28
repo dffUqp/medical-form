@@ -106,7 +106,7 @@ const MedicalSelect = ({
           </MenuItem>
         ))}
       </Select>
-      <FormHelperText>{isError || ''}</FormHelperText>
+      <FormHelperText>{isError || ' '}</FormHelperText>
     </FormControl>
   );
 };

@@ -18,7 +18,7 @@ const FormikInput = ({ label, ...props }: FormikInputProps) => {
       type="text"
       InputLabelProps={{ shrink: true }}
       error={!!isError}
-      helperText={isError || ''}
+      helperText={isError || ' '}
     />
   );
 };
