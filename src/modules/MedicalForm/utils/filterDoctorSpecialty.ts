@@ -22,7 +22,7 @@ const filterDoctorSpecialty = (
     });
   }
 
-  if (patientAge != null) {
+  if (patientAge != null && patientAge >= 0) {
     filteredOptions = filteredOptions.filter((option) => {
       if (option.params?.maxAge) {
         return patientAge < option.params?.maxAge;
@@ -36,7 +36,7 @@ const filterDoctorSpecialty = (
 
   if (values.city) {
     const doctorsInCurrentCity = doctors.filter((value) => {
-      if (patientAge == null) {
+      if (patientAge == null || patientAge < 0) {
         return value.cityId === values.city;
       }
       return (

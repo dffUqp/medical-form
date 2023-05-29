@@ -19,7 +19,7 @@ const dateSchema = string().test(
     const currentDate = dayjs();
     const patientAge = currentDate.diff(testContext.originalValue, 'year');
 
-    return patientAge <= 110;
+    return patientAge >= 0 && patientAge <= 110;
   }
 );
 

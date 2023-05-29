@@ -20,7 +20,7 @@ const filterDoctor = (
     });
   }
 
-  if (patientAge != null) {
+  if (patientAge != null && patientAge >= 0) {
     filteredOptions = filteredOptions.filter((option) => {
       const doctorSpecialty = specialties.find(
         (spec) => spec.id === option.specialityId
