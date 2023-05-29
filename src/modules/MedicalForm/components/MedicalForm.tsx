@@ -45,7 +45,12 @@ const MedicalForm = () => {
                 gap: '20px',
               }}
             >
-              <FormikInput name="name" label="Name" type="text" />
+              <FormikInput
+                name="name"
+                label="Name"
+                type="text"
+                placeholder="e.g., John Doe"
+              />
 
               <FormikDatePicker name="birthdayDate" label="Birthday Date" />
 
@@ -74,7 +79,11 @@ const MedicalForm = () => {
                 options={doctors}
               />
 
-              <FormikInput name="email" label="Email" />
+              <FormikInput
+                name="email"
+                label="Email"
+                placeholder="e.g., john.doe@email.com"
+              />
 
               <FormikNumberInput name="phoneNumber" />
 
