@@ -60,7 +60,7 @@ const MedicalSelect = ({
 
   useEffect(() => {
     if (!filteredOptions.find((option) => option.id === field.value)) {
-      setFieldValue(name, '', false);
+      setFieldValue(name, '');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
