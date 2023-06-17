@@ -12,14 +12,20 @@ import FormikNumberInput from './FormikNumberInput';
 
 import { initialValues, validationSchema } from '../formik';
 
+const GENDER_OPTIONS = [
+  { name: 'Male', id: 'Male' },
+  { name: 'Female', id: 'Female' },
+];
+
 const MedicalForm = () => {
   const { data: doctorSpecialty } = useFetch<ISpecialty[]>(
     urls.getDoctorSpecialty
   );
   const { data: cities } = useFetch<ICity[]>(urls.getCity);
   const { data: doctors } = useFetch<IDoctor[]>(urls.getDoctors);
+  const isLoading = !doctorSpecialty || !cities || !doctors;
 
-  if (!doctorSpecialty || !cities || !doctors) {
+  if (isLoading) {
     return <CircularProgress />;
   }
 
@@ -54,14 +60,7 @@ const MedicalForm = () => {
 
               <FormikDatePicker name="birthdayDate" label="Birthday Date" />
 
-              <MedicalSelect
-                name="sex"
-                options={[
-                  { name: 'Male', id: 'Male' },
-                  { name: 'Female', id: 'Female' },
-                ]}
-                label="Sex"
-              />
+              <MedicalSelect name="sex" options={GENDER_OPTIONS} label="Sex" />
 
               <MedicalSelect name="city" options={cities} label="City" />
 

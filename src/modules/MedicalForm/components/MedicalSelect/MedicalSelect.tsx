@@ -1,5 +1,4 @@
-import { useEffect, useCallback } from 'react';
-
+import { useEffect } from 'react';
 import {
   Select,
   MenuItem,
@@ -9,37 +8,11 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 import { useField, useFormikContext } from 'formik';
-import {
-  IAppointmentFormData,
-  IDoctor,
-  ISpecialty,
-  TSelectOptions,
-} from '../interfaces';
-import useFilteredData from '../hooks/useFilteredData';
 
-type TMedicalSelectStaticProps = {
-  options: TSelectOptions;
-  label: string;
-};
+import type TMedicalSelectProps from './MedicalSelect.props';
 
-type TMedicalSelectProps = (
-  | {
-      name: 'doctor';
-      specialties: ISpecialty[];
-      doctors?: never;
-    }
-  | {
-      name: 'doctorSpecialty';
-      doctors: IDoctor[];
-      specialties?: never;
-    }
-  | {
-      name: keyof IAppointmentFormData;
-      doctors?: never;
-      specialties?: never;
-    }
-) &
-  TMedicalSelectStaticProps;
+import { IAppointmentFormData } from '../../interfaces';
+import useFilteredOptions from '../../hooks/useFilteredData';
 
 const MedicalSelect = ({
   options,
@@ -50,44 +23,57 @@ const MedicalSelect = ({
 }: TMedicalSelectProps) => {
   const [field, meta] = useField(name);
   const { values, setFieldValue } = useFormikContext<IAppointmentFormData>();
-  const filteredOptions = useFilteredData({
+  const {
+    sex: currentSex,
+    birthdayDate: currentBirthdayDate,
+    doctorSpecialty: currentDoctorSpecialty,
+    doctor: currentDoctor,
+    city: currentCity,
+  } = values;
+  const filteredOptions = useFilteredOptions({
     name,
     values,
     options,
     doctors,
     specialties,
   });
-
-  useEffect(() => {
-    if (!filteredOptions.find((option) => option.id === field.value)) {
-      setFieldValue(name, '');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    values.sex,
-    values.birthdayDate,
-    values.doctorSpecialty,
-    values.doctor,
-    values.city,
-  ]);
-
   const isError = meta.touched && meta.error;
 
-  const onChange = useCallback((e: SelectChangeEvent<string>) => {
+  useEffect(() => {
+    const hasFilteredOptionsCurrentValue = filteredOptions.find(
+      (option) => option.id === field.value
+    );
+
+    if (!hasFilteredOptionsCurrentValue) {
+      setFieldValue(name, '');
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    currentSex,
+    currentBirthdayDate,
+    currentDoctorSpecialty,
+    currentDoctor,
+    currentCity,
+  ]);
+
+  const onChange = (e: SelectChangeEvent<string>) => {
     if (name === 'doctor') {
-      const doctor = options?.find((value) => value.id === e.target.value);
-      if (!values.city) {
-        setFieldValue('city', doctor?.cityId);
+      const fullDoctorInfo = filteredOptions.find(
+        (value) => value.id === e.target.value
+      );
+
+      if (!currentCity) {
+        setFieldValue('city', fullDoctorInfo?.cityId);
       }
 
-      if (!values.doctorSpecialty) {
-        setFieldValue('doctorSpecialty', doctor?.specialityId);
+      if (!currentDoctorSpecialty) {
+        setFieldValue('doctorSpecialty', fullDoctorInfo?.specialityId);
       }
     }
 
     field.onChange(e);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
   return (
     <FormControl fullWidth error={!!isError} size="small">

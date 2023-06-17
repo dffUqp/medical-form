@@ -1,5 +1,5 @@
 import { Box, Container } from '@mui/material';
-import { MedicalForm } from 'src/modules/MedicalForm';
+import MedicalForm from 'src/modules/MedicalForm';
 
 const HomePage = () => {
   return (

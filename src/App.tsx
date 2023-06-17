@@ -1,5 +1,5 @@
 import HomePage from './pages/HomePage';
-import { MuiWrapper } from './theme';
+import MuiWrapper from './theme';
 
 function App() {
   return (

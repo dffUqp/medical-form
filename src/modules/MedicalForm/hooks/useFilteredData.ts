@@ -1,65 +1,57 @@
-import dayjs from 'dayjs';
 import { useMemo } from 'react';
-import filterDoctorSpecialty from '../utils/filterDoctorSpecialty';
-import filterDoctor from '../utils/filterDoctor';
+import dayjs from 'dayjs';
 import {
   IAppointmentFormData,
   IDoctor,
   ISpecialty,
   TSelectOptions,
 } from '../interfaces';
+import { filterDoctors, filterDoctorSpecialties } from '../utils';
 
-type IFilteredDataProps = {
+type TFilteredDataProps = {
+  name: keyof IAppointmentFormData;
   options: TSelectOptions;
-  name: string;
-  doctors?: IDoctor[];
-  specialties?: ISpecialty[];
   values: IAppointmentFormData;
+  specialties?: ISpecialty[];
+  doctors?: IDoctor[];
 };
 
-const useFilteredData = ({
+const useFilteredOptions = ({
   name,
   values,
   options,
   doctors,
   specialties,
-}: IFilteredDataProps): TSelectOptions => {
-  const formattedOption = useMemo(
-    () =>
-      name === 'doctor'
-        ? options.map((option) => ({
-            ...option,
-            name: `${option.name} ${option.surname}`,
-          }))
-        : options,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [name]
-  );
-
+}: TFilteredDataProps): TSelectOptions => {
   const patientAge = useMemo(
-    () => values.birthdayDate && dayjs().diff(values.birthdayDate, 'year'),
+    () => dayjs().diff(values.birthdayDate, 'year'),
     [values.birthdayDate]
   );
 
-  if (doctors) {
-    return filterDoctorSpecialty(
-      formattedOption as ISpecialty[],
+  if (name === 'doctor' && specialties) {
+    const formattedOptions = options.map((option) => ({
+      ...option,
+      name: `${option.name} ${option.surname}`,
+    }));
+
+    return filterDoctors(
+      formattedOptions as IDoctor[],
+      values,
+      patientAge,
+      specialties
+    );
+  }
+
+  if (name === 'doctorSpecialty' && doctors) {
+    return filterDoctorSpecialties(
+      options as ISpecialty[],
       values,
       patientAge,
       doctors
     );
   }
 
-  if (specialties) {
-    return filterDoctor(
-      formattedOption as IDoctor[],
-      values,
-      patientAge,
-      specialties as ISpecialty[]
-    );
-  }
-
-  return formattedOption;
+  return options;
 };
 
-export default useFilteredData;
+export default useFilteredOptions;

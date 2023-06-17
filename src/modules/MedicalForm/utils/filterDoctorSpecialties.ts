@@ -1,9 +1,9 @@
 import { IAppointmentFormData, IDoctor, ISpecialty } from '../interfaces';
 
-const filterDoctorSpecialty = (
+const filterDoctorSpecialties = (
   formattedOption: ISpecialty[],
   values: IAppointmentFormData,
-  patientAge: number | null,
+  patientAge: number,
   doctors: IDoctor[]
 ) => {
   let filteredOptions = formattedOption;
@@ -22,7 +22,7 @@ const filterDoctorSpecialty = (
     });
   }
 
-  if (patientAge != null && patientAge >= 0) {
+  if (patientAge >= 0) {
     filteredOptions = filteredOptions.filter((option) => {
       if (option.params?.maxAge) {
         return patientAge < option.params?.maxAge;
@@ -36,9 +36,10 @@ const filterDoctorSpecialty = (
 
   if (values.city) {
     const doctorsInCurrentCity = doctors.filter((value) => {
-      if (patientAge == null || patientAge < 0) {
+      if (Number.isNaN(patientAge) || patientAge < 0) {
         return value.cityId === values.city;
       }
+
       return (
         value.cityId === values.city && value.isPediatrician === patientAge < 16
       );
@@ -54,4 +55,4 @@ const filterDoctorSpecialty = (
   return filteredOptions;
 };
 
-export default filterDoctorSpecialty;
+export default filterDoctorSpecialties;

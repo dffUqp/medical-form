@@ -1,2 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
-export { default as MuiWrapper } from './MuiWrapper';
+import MuiWrapper from './MuiWrapper';
+
+export default MuiWrapper;

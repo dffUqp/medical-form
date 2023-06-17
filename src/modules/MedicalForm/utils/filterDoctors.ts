@@ -1,9 +1,9 @@
 import { IAppointmentFormData, IDoctor, ISpecialty } from '../interfaces';
 
-const filterDoctor = (
+const filterDoctors = (
   formattedOption: IDoctor[],
   values: IAppointmentFormData,
-  patientAge: number | null,
+  patientAge: number,
   specialties: ISpecialty[]
 ) => {
   let filteredOptions = formattedOption;
@@ -20,7 +20,7 @@ const filterDoctor = (
     });
   }
 
-  if (patientAge != null && patientAge >= 0) {
+  if (patientAge >= 0) {
     filteredOptions = filteredOptions.filter((option) => {
       const doctorSpecialty = specialties.find(
         (spec) => spec.id === option.specialityId
@@ -58,4 +58,4 @@ const filterDoctor = (
   return filteredOptions;
 };
 
-export default filterDoctor;
+export default filterDoctors;
