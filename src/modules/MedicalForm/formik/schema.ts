@@ -8,7 +8,7 @@ const contactsSchema = string().test(
   (_, testContext) => {
     const { phoneNumber, email } = testContext.parent;
 
-    return !!(email || phoneNumber);
+    return email || phoneNumber;
   }
 );
 
@@ -35,7 +35,7 @@ const validationSchema = object().shape({
     .transform((value) =>
       value.replace(value?.split(' ')[0], '').replace(/ /g, '')
     )
-    .matches(regExp.atLestEightChar, 'Phone number must be at least 8 digits'),
+    .matches(regExp.nineDigits, 'Phone number must contain 9 digits'),
 });
 
 export default validationSchema;
