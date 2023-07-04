@@ -2,11 +2,13 @@ import { useEffect } from 'react';
 import {
   Select,
   MenuItem,
-  FormControl,
   InputLabel,
+  IconButton,
+  FormControl,
   FormHelperText,
   SelectChangeEvent,
 } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
 import { useField, useFormikContext } from 'formik';
 
 import type TMedicalSelectProps from './MedicalSelect.props';
@@ -22,7 +24,8 @@ const MedicalSelect = ({
   label,
 }: TMedicalSelectProps) => {
   const [field, meta] = useField(name);
-  const { values, setFieldValue } = useFormikContext<IAppointmentFormData>();
+  const { values, setFieldValue, setFieldTouched } =
+    useFormikContext<IAppointmentFormData>();
   const {
     sex: currentSex,
     birthdayDate: currentBirthdayDate,
@@ -40,11 +43,16 @@ const MedicalSelect = ({
   const isError = meta.touched && meta.error;
 
   useEffect(() => {
+    if ((name !== 'doctor' && name !== 'doctorSpecialty') || !field.value) {
+      return;
+    }
+
     const hasFilteredOptionsCurrentValue = filteredOptions.find(
       (option) => option.id === field.value
     );
 
     if (!hasFilteredOptionsCurrentValue) {
+      setFieldTouched(name, false);
       setFieldValue(name, '');
     }
 
@@ -57,10 +65,10 @@ const MedicalSelect = ({
     currentCity,
   ]);
 
-  const onChange = (e: SelectChangeEvent<string>) => {
+  const handleOptionChange = (event: SelectChangeEvent<string>) => {
     if (name === 'doctor') {
       const fullDoctorInfo = filteredOptions.find(
-        (value) => value.id === e.target.value
+        (value) => value.id === event.target.value
       );
 
       if (!currentCity) {
@@ -72,7 +80,12 @@ const MedicalSelect = ({
       }
     }
 
-    field.onChange(e);
+    field.onChange(event);
+  };
+
+  const handleClearOption = () => {
+    setFieldTouched(name, false);
+    setFieldValue(name, '');
   };
 
   return (
@@ -80,11 +93,21 @@ const MedicalSelect = ({
       <InputLabel id={`${label}simple-select`}>{label}</InputLabel>
       <Select
         {...field}
-        onChange={onChange}
-        labelId={`${label}simple-select`}
+        onChange={handleOptionChange}
+        labelId={`${label}-id`}
         label={label}
-        id="demo-simple-select"
-        defaultValue=""
+        disabled={!filteredOptions.length}
+        endAdornment={
+          <IconButton
+            sx={{
+              display: field.value ? 'flex' : 'none',
+              marginRight: '7px',
+            }}
+            onClick={handleClearOption}
+          >
+            <ClearIcon fontSize="small" />
+          </IconButton>
+        }
       >
         {filteredOptions.map((option) => (
           <MenuItem key={option.name} value={option.id}>
