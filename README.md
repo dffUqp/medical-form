@@ -7,7 +7,7 @@
 This project uses the following packages:
 
 - [Vite](https://vitejs.dev/)
-- [Formik](https://redux-toolkit.js.org/)
+- [Formik](https://formik.org/docs/overview)
 - [Yup](https://www.npmjs.com/package/yup)
 - [Ky](https://www.npmjs.com/package/ky)
 - [MUI5](https://mui.com/getting-started/installation/)
